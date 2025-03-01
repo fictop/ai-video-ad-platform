@@ -3,9 +3,7 @@
 * Copyright 2013-2023 Start Bootstrap
 * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-creative/blob/master/LICENSE)
 */
-//
 // Scripts
-// 
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -20,7 +18,6 @@ window.addEventListener('DOMContentLoaded', event => {
         } else {
             navbarCollapsible.classList.add('navbar-shrink')
         }
-
     };
 
     // Shrink the navbar 
@@ -36,7 +33,7 @@ window.addEventListener('DOMContentLoaded', event => {
             target: '#mainNav',
             rootMargin: '0px 0px -40%',
         });
-    };
+    }
 
     // Collapse responsive navbar when toggler is visible
     const navbarToggler = document.body.querySelector('.navbar-toggler');
@@ -56,5 +53,20 @@ window.addEventListener('DOMContentLoaded', event => {
         elements: '#portfolio a.portfolio-box'
     });
 
-});
+    // Fetch and Load meta.json
+    fetch("https://fictop.github.io/ai-video-ad-platform/meta.json")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("meta.json loaded successfully:", data);
+            // Do something with the data, like updating the page
+        })
+        .catch(error => {
+            console.error("Error loading meta.json:", error);
+        });
 
+});
