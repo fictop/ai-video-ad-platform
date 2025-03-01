@@ -1,4 +1,4 @@
-fetch(".meta.json")  // Relative path (works if file is inside the same folder)
+fetch("meta.json")  // Relative path (works if file is inside the same folder)
     .then(response => {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
