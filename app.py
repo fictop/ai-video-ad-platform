@@ -3,22 +3,22 @@ from flask_cors import CORS
 import subprocess
 import os
 
-# Define the Flask app and enable CORS
+# Define the Flask app and enable CORS for all routes
 app = Flask(__name__)
-CORS(app)  # This will enable CORS for all routes
+CORS(app)
 
 # Home endpoint
 @app.route("/")
 def home():
     return "AI Video Ad Platform Backend is Running!"
 
-# (Optional) Existing /generate-video endpoint (if you want to keep it)
+# Existing /generate-video endpoint (optional)
 @app.route("/generate-video", methods=["POST", "OPTIONS"])
 def generate_video():
     if request.method == "OPTIONS":
         return jsonify({}), 200
 
-    data = request.json  
+    data = request.json
     product_name = data.get("product_name", "Unknown Product")
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
 
@@ -61,23 +61,22 @@ def create_ad():
             "status": "error"
         })
 
-# Placeholder helper functions – these must be replaced with actual integration later.
+# Placeholder helper functions – these should later be replaced with actual integrations.
 def generate_avatar(prompt):
-    # For now, return a placeholder image path
+    # For now, return a placeholder image file
     return "avatar.png"
 
 def animate_avatar(avatar_image_path):
-    # For now, return a placeholder animated video path
+    # For now, return a placeholder animated video file
     return "animated_avatar.mp4"
 
 def generate_voice(text):
-    # For now, return a placeholder audio file path
+    # For now, return a placeholder audio file
     return "voice.wav"
 
 def sync_lip(video_path, audio_path):
-    # For now, simulate lip syncing by returning a placeholder file path.
+    # For now, simulate lip syncing by calling Wav2Lip script (placeholder)
     output_synced = "synced_video.mp4"
-    # Example command – in production, ensure that the Wav2Lip script and checkpoint exist.
     command = [
         "python", "Wav2Lip/inference.py",
         "--checkpoint_path", "Wav2Lip/checkpoints/wav2lip_gan.pth",
@@ -90,7 +89,6 @@ def sync_lip(video_path, audio_path):
 
 def merge_video(audio_path, video_path):
     final_output = "final_ad.mp4"
-    # Example FFmpeg command – adjust as needed.
     command = [
         "ffmpeg", "-y", "-i", video_path, "-i", audio_path,
         "-c:v", "copy", "-c:a", "aac", final_output
