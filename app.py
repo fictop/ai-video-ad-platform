@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import subprocess
 import os
 
 # Define the Flask app and enable CORS for all routes
@@ -17,7 +16,6 @@ def home():
 def generate_video():
     if request.method == "OPTIONS":
         return jsonify({}), 200
-
     data = request.json  
     product_name = data.get("product_name", "Unknown Product")
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
@@ -27,7 +25,6 @@ def generate_video():
 def create_ad():
     if request.method == "OPTIONS":
         return jsonify({}), 200
-
     data = request.json
     product_name = data.get("product_name", "Demo Product")
     prompt = data.get("prompt", "A professional avatar for advertisement")
@@ -52,7 +49,7 @@ def create_ad():
             "status": "error"
         })
 
-# Placeholder helper functions – to be replaced with actual integrations later.
+# Placeholder helper functions – replace with actual integration later.
 def generate_avatar(prompt):
     return "avatar.png"
 
