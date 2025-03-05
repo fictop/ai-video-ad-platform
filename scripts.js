@@ -1,9 +1,12 @@
-fetch("https://api.fictop.com/generate-video", {
+fetch("https://api.fictop.com/create-ad", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
-    body: JSON.stringify({ product_name: "Demo Product" })
+    body: JSON.stringify({ 
+        product_name: "Demo Product",
+        prompt: "A futuristic professional avatar for advertisement"
+    })
 })
 .then(response => response.json())
 .then(data => {
