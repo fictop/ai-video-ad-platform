@@ -3,9 +3,9 @@ from flask_cors import CORS
 import subprocess
 import os
 
-# Define the Flask app and enable CORS
+# Define the Flask app and enable CORS for all routes
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)
 
 # Home endpoint
 @app.route("/")
@@ -54,23 +54,18 @@ def create_ad():
 
 # Placeholder helper functions – to be replaced with actual integrations later.
 def generate_avatar(prompt):
-    # Return a placeholder image file path
     return "avatar.png"
 
 def animate_avatar(avatar_image_path):
-    # Return a placeholder animated video file path
     return "animated_avatar.mp4"
 
 def generate_voice(text):
-    # Return a placeholder audio file path
     return "voice.wav"
 
 def sync_lip(video_path, audio_path):
-    # For now, simulate lip syncing by returning a placeholder file path.
     return "synced_video.mp4"
 
 def merge_video(audio_path, video_path):
-    # For now, simulate video merging by returning a placeholder file path.
     return "final_ad.mp4"
 
 if __name__ == "__main__":
