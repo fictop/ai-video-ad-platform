@@ -15,17 +15,20 @@ def home():
 @app.route("/generate-video", methods=["POST", "OPTIONS"])
 def generate_video():
     if request.method == "OPTIONS":
-        return jsonify({}), 200
-    data = request.json  
+        return _handle_cors_preflight()
+    
+    data = request.json or {}
     product_name = data.get("product_name", "Unknown Product")
+    
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
 
 # New integrated endpoint for creating an ad with the full AI pipeline
 @app.route("/create-ad", methods=["POST", "OPTIONS"])
 def create_ad():
     if request.method == "OPTIONS":
-        return jsonify({}), 200
-    data = request.json
+        return _handle_cors_preflight()
+    
+    data = request.json or {}
     product_name = data.get("product_name", "Demo Product")
     prompt = data.get("prompt", "A professional avatar for advertisement")
     
@@ -44,10 +47,20 @@ def create_ad():
             "status": "success"
         })
     except Exception as e:
+        print(f"Error: {str(e)}")  # Logs error in the console
         return jsonify({
-            "message": str(e),
+            "message": "An error occurred while generating the ad",
+            "error": str(e),
             "status": "error"
-        })
+        }), 500
+
+# Helper function for handling CORS preflight requests
+def _handle_cors_preflight():
+    response = jsonify({})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
 
 # Placeholder helper functions – replace with actual integration later.
 def generate_avatar(prompt):
@@ -67,4 +80,4 @@ def merge_video(audio_path, video_path):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port)
