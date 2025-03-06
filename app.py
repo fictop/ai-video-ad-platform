@@ -2,38 +2,40 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 
-# Define the Flask app and enable CORS for all routes
+# Initialize Flask app and enable CORS for all routes
 app = Flask(__name__)
 CORS(app)
 
 # Home endpoint
 @app.route("/")
 def home():
-    return "AI Video Ad Platform Backend is Running!"
+    return "AI Video Ad Platform Backend is Running!", 200
 
 # Existing /generate-video endpoint (optional)
 @app.route("/generate-video", methods=["POST", "OPTIONS"])
 def generate_video():
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
-    
     data = request.json or {}
     product_name = data.get("product_name", "Unknown Product")
-    
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
 
 # New integrated endpoint for creating an ad with the full AI pipeline
-@app.route("/create-ad", methods=["POST", "OPTIONS"])
+@app.route("/create-ad", methods=["POST", "OPTIONS", "GET"])
 def create_ad():
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
+    
+    # If a GET request is made, return a 405 message instructing to use POST
+    if request.method == "GET":
+        return jsonify({"message": "Please use POST to create an ad", "status": "error"}), 405
     
     data = request.json or {}
     product_name = data.get("product_name", "Demo Product")
     prompt = data.get("prompt", "A professional avatar for advertisement")
     
     try:
-        # Placeholder processing steps:
+        # Placeholder processing steps (to be replaced with real AI integrations)
         avatar_image = generate_avatar(prompt)       # returns "avatar.png"
         animated_video = animate_avatar(avatar_image)  # returns "animated_avatar.mp4"
         voice_text = f"Introducing {product_name} - the best in its class."
@@ -47,14 +49,14 @@ def create_ad():
             "status": "success"
         })
     except Exception as e:
-        print(f"Error: {str(e)}")  # Logs error in the console
+        print(f"Error: {str(e)}")
         return jsonify({
             "message": "An error occurred while generating the ad",
             "error": str(e),
             "status": "error"
         }), 500
 
-# Helper function for handling CORS preflight requests
+# Helper function to handle CORS preflight requests
 def _handle_cors_preflight():
     response = jsonify({})
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -62,7 +64,7 @@ def _handle_cors_preflight():
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return response
 
-# Placeholder helper functions – replace with actual integration later.
+# Placeholder helper functions – replace with actual integrations later.
 def generate_avatar(prompt):
     return "avatar.png"
 
