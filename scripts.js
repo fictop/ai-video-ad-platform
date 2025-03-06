@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .then(data => {
         console.log("API Response:", data);
-        // You can update the UI here if needed
     })
     .catch(error => {
         console.error("Error calling backend API:", error);
