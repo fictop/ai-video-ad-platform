@@ -25,8 +25,7 @@ def generate_video():
 def create_ad():
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
-    
-    # If a GET request is made, return a 405 message instructing to use POST
+    # If a GET request is made, instruct the user to use POST
     if request.method == "GET":
         return jsonify({"message": "Please use POST to create an ad", "status": "error"}), 405
     
@@ -35,8 +34,10 @@ def create_ad():
     prompt = data.get("prompt", "A professional avatar for advertisement")
     
     try:
-        # Placeholder processing steps (to be replaced with real AI integrations)
+        # Generate avatar using Stable Diffusion
         avatar_image = generate_avatar(prompt)       # returns "avatar.png"
+        
+        # The following functions are still placeholders for now.
         animated_video = animate_avatar(avatar_image)  # returns "animated_avatar.mp4"
         voice_text = f"Introducing {product_name} - the best in its class."
         voice_file = generate_voice(voice_text)        # returns "voice.wav"
@@ -56,7 +57,7 @@ def create_ad():
             "status": "error"
         }), 500
 
-# Helper function to handle CORS preflight requests
+# Helper function for handling CORS preflight requests
 def _handle_cors_preflight():
     response = jsonify({})
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -64,10 +65,30 @@ def _handle_cors_preflight():
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return response
 
-# Placeholder helper functions – replace with actual integrations later.
+# Updated generate_avatar function using Stable Diffusion
 def generate_avatar(prompt):
-    return "avatar.png"
+    from diffusers import StableDiffusionPipeline
+    import torch
 
+    model_id = "CompVis/stable-diffusion-v1-4"  # Pre-trained model
+    # Check for GPU availability; if not, use CPU (this may be slower)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        pipe = StableDiffusionPipeline.from_pretrained(model_id, revision="fp16", torch_dtype=torch.float16)
+    else:
+        pipe = StableDiffusionPipeline.from_pretrained(model_id)
+    pipe = pipe.to(device)
+    
+    # Generate the image with a guidance scale for better fidelity
+    result = pipe(prompt, guidance_scale=7.5)
+    image = result.images[0]
+    
+    # Save the generated image
+    output_path = "avatar.png"
+    image.save(output_path)
+    return output_path
+
+# Placeholder helper functions for further processing
 def animate_avatar(avatar_image_path):
     return "animated_avatar.mp4"
 
