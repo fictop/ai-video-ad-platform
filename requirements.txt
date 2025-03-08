@@ -11,6 +11,6 @@ flask_cors==5.0.1
 diffusers
 transformers
 torch
-TTS
+TTS==0.21.1
 opencv-python
 numpy
