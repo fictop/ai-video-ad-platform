@@ -76,15 +76,12 @@ def generate_avatar(prompt):
     import torch
 
     model_id = "CompVis/stable-diffusion-v1-4"
-    device = "cuda" if torch.cuda.is_available() else "cpu"
     
-    if device == "cuda":
-        pipe = StableDiffusionPipeline.from_pretrained(
-            model_id, revision="fp16", torch_dtype=torch.float16
-        )
-    else:
-        pipe = StableDiffusionPipeline.from_pretrained(model_id)
-    pipe = pipe.to(device)
+    # Force CPU mode
+    device = "cpu"
+    pipe = StableDiffusionPipeline.from_pretrained(
+        model_id, safety_checker=None  # Fix for some hosting issues
+    ).to(device)
     
     result = pipe(prompt, guidance_scale=7.5)
     image = result.images[0]
