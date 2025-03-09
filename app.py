@@ -18,7 +18,10 @@ def generate_video():
         return _handle_cors_preflight()
     data = request.json or {}
     product_name = data.get("product_name", "Unknown Product")
-    return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
+    return jsonify({
+        "message": f"Generating video for {product_name}",
+        "status": "success"
+    })
 
 # Main endpoint for creating an ad using the full AI pipeline
 @app.route("/create-ad", methods=["POST", "OPTIONS", "GET"])
@@ -26,7 +29,10 @@ def create_ad():
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
     if request.method == "GET":
-        return jsonify({"message": "Please use POST to create an ad", "status": "error"}), 405
+        return jsonify({
+            "message": "Please use POST to create an ad",
+            "status": "error"
+        }), 405
 
     data = request.json or {}
     product_name = data.get("product_name", "Demo Product")
@@ -70,13 +76,13 @@ def _handle_cors_preflight():
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return response
 
-# Function to generate an avatar image using Stable Diffusion
+# Function to generate an avatar image using Stable Diffusion (CPU mode)
 def generate_avatar(prompt):
     from diffusers import StableDiffusionPipeline
     import torch
 
-    model_id = "CompVis/stable-diffusion-v1-4"  # Pre-trained model
-    # Force CPU mode for a free hosting environment
+    model_id = "CompVis/stable-diffusion-v1-4"
+    # Force CPU mode for free hosting environments
     device = "cpu"
     pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None).to(device)
     result = pipe(prompt, guidance_scale=7.5)
@@ -87,22 +93,22 @@ def generate_avatar(prompt):
 
 # Placeholder function to animate the avatar image
 def animate_avatar(avatar_image_path):
-    # This is a placeholder. Later, you can integrate a tool like SadTalker.
+    # Currently a placeholder—return a dummy file name.
     return "animated_avatar.mp4"
 
 # Placeholder function for generating a voiceover
 def generate_voice(text):
-    # This is a placeholder. You can later integrate a TTS tool.
+    # Currently a placeholder—return a dummy file name.
     return "voice.wav"
 
-# Placeholder function for lip-syncing the voice with the animation
+# Placeholder function for syncing lip movements with the voiceover
 def sync_lip(video_path, audio_path):
-    # This is a placeholder. You can later integrate a tool like Wav2Lip.
+    # Currently a placeholder—return a dummy file name.
     return "synced_video.mp4"
 
-# Placeholder function for merging video and audio into a final video
+# Placeholder function for merging video and audio
 def merge_video(audio_path, video_path):
-    # This is a placeholder. Later, you might use FFmpeg for actual merging.
+    # Currently a placeholder—return a dummy file name.
     return "final_ad.mp4"
 
 if __name__ == "__main__":
