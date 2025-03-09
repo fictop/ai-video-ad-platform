@@ -1,0 +1,8 @@
+schemaVersion: "2022-04-01"
+name: "ai-video-backend"
+language: "python"
+build:
+  commands:
+    - pip install -r requirements.txt
+run:
+  command: "python app.py"
