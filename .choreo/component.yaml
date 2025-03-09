@@ -1,4 +1,4 @@
-schemaVersion: "2023-05-01"
+schemaVersion: "1.0"
 name: "ai-video-backend"
 language: "python"
 build:
@@ -7,4 +7,8 @@ build:
     - pip install -r requirements.txt
 run:
   command: "gunicorn -b 0.0.0.0:10000 app:app"
-
+endpoints:
+  - name: "video-api"
+    service:
+      port: 10000
+    type: REST
