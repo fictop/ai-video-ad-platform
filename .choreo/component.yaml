@@ -1,25 +1,24 @@
-schemaVersion: "1.0"
-name: "ai-video-backend"
-runtime: "python3.10"
-
-source:
-  type: "git"
-  url: "https://github.com/fictop/ai-video-ad-platform"
-  branch: "main"
-
-build:
-  commands:
-    - pip install --upgrade pip
-    - pip cache purge
-    - pip install -r requirements.txt --no-cache-dir
-
-deploy:
-  replicas: 1
-  start_command: "gunicorn -b 0.0.0.0:8000 app:app"
-
-# Expose your service on port 8000 as a REST endpoint
-endpoints:
-  - name: "video-api"
-    service:
-      port: 8000
-    type: "REST"
+version: 2.0
+component:
+  name: ai-video-backend
+  runtime: python3.10
+  source:
+    type: git
+    url: https://github.com/fictop/ai-video-ad-platform
+    branch: main
+  build:
+    commands:
+      - pip install --upgrade pip
+      - pip cache purge
+      - pip install -r requirements.txt --no-cache-dir
+  deploy:
+    replicas: 1
+    env:
+      - name: PORT
+        value: "8000"
+    start_command: "gunicorn -b 0.0.0.0:8000 app:app"
+  endpoints:
+    - name: video-api
+      service:
+        port: 8000
+      type: REST
