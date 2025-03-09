@@ -9,10 +9,11 @@ component:
   build:
     commands:
       - pip install --upgrade pip
-      - pip install -r requirements.txt
+      - pip cache purge   # Clear pip cache to save space
+      - pip install -r requirements.txt --no-cache-dir
   deploy:
     replicas: 1
     env:
       - name: PORT
         value: "8000"
-    start_command: python app.py
+    start_command: gunicorn -b 0.0.0.0:8000 app:app
