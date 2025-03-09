@@ -8,9 +8,11 @@ component:
     branch: main
   build:
     commands:
+      - pip install --upgrade pip
       - pip install -r requirements.txt
   deploy:
     replicas: 1
     env:
       - name: PORT
         value: "8000"
+    start_command: python app.py
