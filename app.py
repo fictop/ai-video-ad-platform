@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+import torch
+from diffusers import StableDiffusionPipeline
 
-# Initialize Flask app and enable CORS for all routes
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app)
 
@@ -11,7 +13,7 @@ CORS(app)
 def home():
     return "AI Video Ad Platform Backend is Running!", 200
 
-# Existing /generate-video endpoint (optional)
+# Video generation endpoint
 @app.route("/generate-video", methods=["POST", "OPTIONS"])
 def generate_video():
     if request.method == "OPTIONS":
@@ -20,30 +22,26 @@ def generate_video():
     product_name = data.get("product_name", "Unknown Product")
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
 
-# New integrated endpoint for creating an ad with the full AI pipeline
+# AI Ad generation endpoint
 @app.route("/create-ad", methods=["POST", "OPTIONS", "GET"])
 def create_ad():
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
-    # If a GET request is made, instruct the user to use POST
     if request.method == "GET":
         return jsonify({"message": "Please use POST to create an ad", "status": "error"}), 405
-    
+
     data = request.json or {}
     product_name = data.get("product_name", "Demo Product")
     prompt = data.get("prompt", "A professional avatar for advertisement")
-    
+
     try:
-        # Generate avatar using Stable Diffusion
         avatar_image = generate_avatar(prompt)       # returns "avatar.png"
-        
-        # The following functions are still placeholders for now.
         animated_video = animate_avatar(avatar_image)  # returns "animated_avatar.mp4"
         voice_text = f"Introducing {product_name} - the best in its class."
         voice_file = generate_voice(voice_text)        # returns "voice.wav"
         synced_video = sync_lip(animated_video, voice_file)  # returns "synced_video.mp4"
         final_video = merge_video(voice_file, synced_video)   # returns "final_ad.mp4"
-        
+
         return jsonify({
             "message": "Video ad generated successfully (test mode)",
             "video_url": final_video,
@@ -57,38 +55,33 @@ def create_ad():
             "status": "error"
         }), 500
 
-# Helper function for handling CORS preflight requests
+# CORS Preflight Handler
 def _handle_cors_preflight():
     response = jsonify({})
     response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return response
 
-# Updated generate_avatar function using Stable Diffusion
+# Generate Avatar using Stable Diffusion
 def generate_avatar(prompt):
-    from diffusers import StableDiffusionPipeline
-    import torch
-
-    model_id = "CompVis/stable-diffusion-v1-4"  # Pre-trained model
-    # Check for GPU availability; if not, use CPU (this may be slower)
+    model_id = "CompVis/stable-diffusion-v1-4"
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    if device == "cuda":
-        pipe = StableDiffusionPipeline.from_pretrained(model_id, revision="fp16", torch_dtype=torch.float16)
-    else:
-        pipe = StableDiffusionPipeline.from_pretrained(model_id)
+
+    # Load model
+    pipe = StableDiffusionPipeline.from_pretrained(model_id)
     pipe = pipe.to(device)
-    
-    # Generate the image with a guidance scale for better fidelity
+
+    # Generate image
     result = pipe(prompt, guidance_scale=7.5)
     image = result.images[0]
-    
-    # Save the generated image
+
+    # Save image
     output_path = "avatar.png"
     image.save(output_path)
     return output_path
 
-# Placeholder helper functions for further processing
+# Placeholder Functions
 def animate_avatar(avatar_image_path):
     return "animated_avatar.mp4"
 
@@ -101,6 +94,7 @@ def sync_lip(video_path, audio_path):
 def merge_video(audio_path, video_path):
     return "final_ad.mp4"
 
+# Ensure Gunicorn can find the app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
