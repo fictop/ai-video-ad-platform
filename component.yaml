@@ -1,8 +1,9 @@
-schemaVersion: "2022-04-01"
+schemaVersion: "2023-05-01"
 name: "ai-video-backend"
 language: "python"
 build:
   commands:
+    - pip install --upgrade pip
     - pip install -r requirements.txt
 run:
-  command: "python app.py"
+  command: "gunicorn -b 0.0.0.0:10000 app:app"
