@@ -1,10 +1,9 @@
-.git
-__pycache__
+**/__pycache__
 *.pyc
 *.pyo
 *.pyd
-.Python
-env
+.env
 venv
 *.egg-info
 *.log
+.DS_Store
