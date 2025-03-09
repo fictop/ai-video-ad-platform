@@ -70,7 +70,11 @@ def generate_avatar(prompt):
     return output_path
 
 def animate_avatar(avatar_image_path):
+    # This is a placeholder function.
+    # In a full implementation, you might call an external script (e.g., SadTalker) to animate the image.
+    # For now, we'll simply return a filename that represents the animated video.
     return "animated_avatar.mp4"
+
 
 def generate_voice(text):
     return "voice.wav"
