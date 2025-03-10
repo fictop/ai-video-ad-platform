@@ -4,15 +4,21 @@ component:
   runtime: python3.10
   source:
     type: git
-    url: https://github.com/YOUR-USERNAME/ai-video-ad-platform
+    url: https://github.com/fictop/ai-video-ad-platform
     branch: main
   build:
     commands:
       - pip install --upgrade pip
+      - pip cache purge
       - pip install -r requirements.txt --no-cache-dir
   deploy:
     replicas: 1
     env:
       - name: PORT
         value: "8000"
-    start_command: gunicorn -b 0.0.0.0:8000 app:app
+    start_command: "gunicorn -b 0.0.0.0:8000 app:app"
+  endpoints:
+    - name: video-api
+      service:
+        port: 8000
+      type: REST
