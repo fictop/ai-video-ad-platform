@@ -19,7 +19,7 @@ component:
       - name: PORT
         value: "8000"
     # Gunicorn on port 8000
-    start_command: "gunicorn -b 0.0.0.0:8000 app:app"
+    start_command: "gunicorn -b 0.0.0.0:8000 app"
 
   endpoints:
     - name: video-api
