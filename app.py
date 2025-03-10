@@ -6,14 +6,14 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/")
-def health_check():
+def home():
     return "AI Video Ad Platform Backend is Running!", 200
 
 @app.route("/generate-video", methods=["POST", "OPTIONS"])
 def generate_video():
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
     product_name = data.get("product_name", "Unknown Product")
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
 
@@ -24,21 +24,32 @@ def create_ad():
     if request.method == "GET":
         return jsonify({"message": "Please use POST to create an ad", "status": "error"}), 405
 
-    data = request.json or {}
+    data = request.get_json(silent=True) or {}
     product_name = data.get("product_name", "Demo Product")
     prompt = data.get("prompt", "A professional avatar for advertisement")
 
-    # Just a placeholder flow:
-    avatar_image = "avatar.png"
-    final_video = "final_ad.mp4"
-    return jsonify({
-        "message": "Video ad generated successfully (test mode)",
-        "product_name": product_name,
-        "prompt": prompt,
-        "avatar": avatar_image,
-        "video_url": final_video,
-        "status": "success"
-    })
+    try:
+        # Placeholder: Generate avatar image using Stable Diffusion (CPU-only)
+        avatar_image = generate_avatar(prompt)
+
+        # Placeholder: Other processing steps (animation, voice, etc.)
+        animated_video = animate_avatar(avatar_image)
+        voice_file = generate_voice(f"Introducing {product_name} - the best in its class.")
+        synced_video = sync_lip(animated_video, voice_file)
+        final_video = merge_video(voice_file, synced_video)
+
+        return jsonify({
+            "message": "Video ad generated successfully (test mode)",
+            "video_url": final_video,
+            "status": "success"
+        })
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        return jsonify({
+            "message": "An error occurred while generating the ad",
+            "error": str(e),
+            "status": "error"
+        }), 500
 
 def _handle_cors_preflight():
     resp = jsonify({})
@@ -46,6 +57,31 @@ def _handle_cors_preflight():
     resp.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
     resp.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
     return resp
+
+def generate_avatar(prompt):
+    from diffusers import StableDiffusionPipeline
+    import torch
+
+    model_id = "CompVis/stable-diffusion-v1-4"
+    device = "cpu"  # Force CPU mode
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None).to(device)
+    result = pipe(prompt, guidance_scale=7.5)
+    image = result.images[0]
+    output_path = "avatar.png"
+    image.save(output_path)
+    return output_path
+
+def animate_avatar(avatar_path):
+    return "animated_avatar.mp4"
+
+def generate_voice(text):
+    return "voice.wav"
+
+def sync_lip(video_path, audio_path):
+    return "synced_video.mp4"
+
+def merge_video(audio_path, video_path):
+    return "final_ad.mp4"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
