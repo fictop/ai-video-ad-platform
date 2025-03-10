@@ -6,39 +6,41 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/")
-def home():
-    """Health check endpoint."""
-    return "AI Video Ad Platform Backend (Placeholder) is Running!", 200
+def health_check():
+    return "AI Video Ad Platform Backend is Running!", 200
 
 @app.route("/generate-video", methods=["POST", "OPTIONS"])
 def generate_video():
-    """Optional placeholder endpoint."""
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
-    data = request.get_json(silent=True) or {}
+    data = request.json or {}
     product_name = data.get("product_name", "Unknown Product")
     return jsonify({"message": f"Generating video for {product_name}", "status": "success"})
 
 @app.route("/create-ad", methods=["POST", "OPTIONS", "GET"])
 def create_ad():
-    """Main endpoint for ad generation (placeholder)."""
     if request.method == "OPTIONS":
         return _handle_cors_preflight()
     if request.method == "GET":
         return jsonify({"message": "Please use POST to create an ad", "status": "error"}), 405
 
-    data = request.get_json(silent=True) or {}
+    data = request.json or {}
     product_name = data.get("product_name", "Demo Product")
+    prompt = data.get("prompt", "A professional avatar for advertisement")
 
-    # Placeholder logic
+    # Just a placeholder flow:
+    avatar_image = "avatar.png"
+    final_video = "final_ad.mp4"
     return jsonify({
-        "message": "Video ad generated successfully (placeholder)",
-        "product": product_name,
+        "message": "Video ad generated successfully (test mode)",
+        "product_name": product_name,
+        "prompt": prompt,
+        "avatar": avatar_image,
+        "video_url": final_video,
         "status": "success"
     })
 
 def _handle_cors_preflight():
-    """Helper for CORS preflight."""
     resp = jsonify({})
     resp.headers.add("Access-Control-Allow-Origin", "*")
     resp.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
