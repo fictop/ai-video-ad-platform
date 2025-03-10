@@ -1,25 +1,24 @@
-schemaVersion: "2.0"
+schemaVersion: "2023-05-01"
 component:
-  name: "ai-video-backend"
-  runtime: "python3.10"
+  name: ai-video-backend
+  runtime: python3.10
   source:
-    type: "git"
-    url: "https://github.com/fictop/ai-video-ad-platform"
-    branch: "main"
+    type: git
+    url: https://github.com/fictop/ai-video-ad-platform
+    branch: main
   build:
     commands:
-      - "pip install --upgrade pip"
-      - "pip install -r requirements.txt"
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
   deploy:
     replicas: 1
     env:
-      - name: "PORT"
+      - name: PORT
         value: "8000"
     start_command: "gunicorn app:app --bind 0.0.0.0:8000"
 
-# Tells Choreo how to map your service port
 endpoints:
-  - name: "ai-video-backend"
+  - name: ai-video-backend
     type: REST
     service:
       port: 8000
