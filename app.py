@@ -31,11 +31,13 @@ def create_ad():
     try:
         # Placeholder: Generate avatar image using Stable Diffusion (CPU-only)
         avatar_image = generate_avatar(prompt)
-
-        # Placeholder: Other processing steps (animation, voice, etc.)
+        # Placeholder: Animate avatar (this function returns a dummy filename)
         animated_video = animate_avatar(avatar_image)
+        # Placeholder: Generate voice file (dummy filename)
         voice_file = generate_voice(f"Introducing {product_name} - the best in its class.")
+        # Placeholder: Sync lip movements (dummy filename)
         synced_video = sync_lip(animated_video, voice_file)
+        # Placeholder: Merge video and audio (dummy filename)
         final_video = merge_video(voice_file, synced_video)
 
         return jsonify({
@@ -52,11 +54,11 @@ def create_ad():
         }), 500
 
 def _handle_cors_preflight():
-    resp = jsonify({})
-    resp.headers.add("Access-Control-Allow-Origin", "*")
-    resp.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    resp.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-    return resp
+    response = jsonify({})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
 
 def generate_avatar(prompt):
     from diffusers import StableDiffusionPipeline
@@ -72,15 +74,19 @@ def generate_avatar(prompt):
     return output_path
 
 def animate_avatar(avatar_path):
+    # Placeholder: Return a dummy filename
     return "animated_avatar.mp4"
 
 def generate_voice(text):
+    # Placeholder: Return a dummy filename
     return "voice.wav"
 
 def sync_lip(video_path, audio_path):
+    # Placeholder: Return a dummy filename
     return "synced_video.mp4"
 
 def merge_video(audio_path, video_path):
+    # Placeholder: Return a dummy filename
     return "final_ad.mp4"
 
 if __name__ == "__main__":
