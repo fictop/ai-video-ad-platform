@@ -29,15 +29,19 @@ def create_ad():
     prompt = data.get("prompt", "A professional avatar for advertisement")
 
     try:
-        # Placeholder: Generate avatar image using Stable Diffusion (CPU-only)
+        # Step 1: Generate avatar image using Stable Diffusion (CPU-only)
         avatar_image = generate_avatar(prompt)
-        # Placeholder: Animate avatar (this function returns a dummy filename)
+        
+        # Step 2: Placeholder: Animate avatar
         animated_video = animate_avatar(avatar_image)
-        # Placeholder: Generate voice file (dummy filename)
+        
+        # Step 3: Placeholder: Generate voice file
         voice_file = generate_voice(f"Introducing {product_name} - the best in its class.")
-        # Placeholder: Sync lip movements (dummy filename)
+        
+        # Step 4: Placeholder: Sync lip movements
         synced_video = sync_lip(animated_video, voice_file)
-        # Placeholder: Merge video and audio (dummy filename)
+        
+        # Step 5: Placeholder: Merge video and audio
         final_video = merge_video(voice_file, synced_video)
 
         return jsonify({
@@ -63,10 +67,15 @@ def _handle_cors_preflight():
 def generate_avatar(prompt):
     from diffusers import StableDiffusionPipeline
     import torch
+    import os
+
+    # Create a cache directory in the current directory (writable)
+    cache_dir = "./.cache"
+    os.makedirs(cache_dir, exist_ok=True)
 
     model_id = "CompVis/stable-diffusion-v1-4"
     device = "cpu"  # Force CPU mode
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None).to(device)
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None, cache_dir=cache_dir).to(device)
     result = pipe(prompt, guidance_scale=7.5)
     image = result.images[0]
     output_path = "avatar.png"
