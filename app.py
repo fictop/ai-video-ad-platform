@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False  # Allow routes with or without trailing slash
 CORS(app)
 
 @app.route("/")
@@ -29,19 +30,19 @@ def create_ad():
     prompt = data.get("prompt", "A professional avatar for advertisement")
 
     try:
-        # Step 1: Generate avatar image using Stable Diffusion (CPU-only)
+        # Step 1: Generate an avatar image using Stable Diffusion (CPU-only)
         avatar_image = generate_avatar(prompt)
         
-        # Step 2: Placeholder: Animate avatar
+        # Step 2: Animate avatar (placeholder function)
         animated_video = animate_avatar(avatar_image)
         
-        # Step 3: Placeholder: Generate voice file
+        # Step 3: Generate a voice file (placeholder function)
         voice_file = generate_voice(f"Introducing {product_name} - the best in its class.")
         
-        # Step 4: Placeholder: Sync lip movements
+        # Step 4: Sync lip movements (placeholder function)
         synced_video = sync_lip(animated_video, voice_file)
         
-        # Step 5: Placeholder: Merge video and audio
+        # Step 5: Merge video and audio (placeholder function)
         final_video = merge_video(voice_file, synced_video)
 
         return jsonify({
@@ -69,13 +70,15 @@ def generate_avatar(prompt):
     import torch
     import os
 
-    # Create a cache directory in the current directory (writable)
+    # Create a writable cache directory
     cache_dir = "./.cache"
     os.makedirs(cache_dir, exist_ok=True)
 
     model_id = "CompVis/stable-diffusion-v1-4"
     device = "cpu"  # Force CPU mode
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None, cache_dir=cache_dir).to(device)
+    pipe = StableDiffusionPipeline.from_pretrained(
+        model_id, safety_checker=None, cache_dir=cache_dir
+    ).to(device)
     result = pipe(prompt, guidance_scale=7.5)
     image = result.images[0]
     output_path = "avatar.png"
@@ -83,19 +86,19 @@ def generate_avatar(prompt):
     return output_path
 
 def animate_avatar(avatar_path):
-    # Placeholder: Return a dummy filename
+    # Placeholder: return dummy filename
     return "animated_avatar.mp4"
 
 def generate_voice(text):
-    # Placeholder: Return a dummy filename
+    # Placeholder: return dummy filename
     return "voice.wav"
 
 def sync_lip(video_path, audio_path):
-    # Placeholder: Return a dummy filename
+    # Placeholder: return dummy filename
     return "synced_video.mp4"
 
 def merge_video(audio_path, video_path):
-    # Placeholder: Return a dummy filename
+    # Placeholder: return dummy filename
     return "final_ad.mp4"
 
 if __name__ == "__main__":
