@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AI Video Ad Platform</title>
-  <!-- Link to CSS hosted via jsDelivr so that it loads correctly -->
+  <!-- Link to CSS hosted via jsDelivr -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fictop/ai-video-ad-platform/styles.css">
   <!-- Load your JavaScript file (deferred) -->
   <script defer src="script.js"></script>
@@ -29,7 +29,6 @@
   <section id="home" class="hero">
     <h1>Create Professional AI Video Ads Effortlessly</h1>
     <p>Use AI avatars to make engaging ads in minutes.</p>
-    <!-- Optional additional button -->
     <button class="cta-button" id="tryForFreeBtn">Try for Free</button>
   </section>
   
@@ -58,10 +57,13 @@
     <p>Choose a plan that fits your business needs.</p>
   </section>
   
-  <!-- Result Section: To display API response -->
+  <!-- Result Section -->
   <section id="resultSection">
     <h2>Result</h2>
+    <!-- This div will show API response as JSON -->
     <div id="result"></div>
+    <!-- Video player to display the generated video -->
+    <video id="videoPlayer" controls style="display:none; width:100%; max-width:500px;"></video>
   </section>
   
   <!-- Footer -->
