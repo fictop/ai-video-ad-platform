@@ -17,9 +17,15 @@ document.addEventListener("DOMContentLoaded", function () {
         return response.json();
     })
     .then(data => {
-        console.log("API Response:", data);
+        console.log("API Response:", data); // Log the response
+
         // Optionally, update your UI by setting the response into an element:
-        // document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+        const resultElement = document.getElementById("result");
+        if (resultElement) {
+            resultElement.innerText = JSON.stringify(data, null, 2);
+        } else {
+            console.log("Result element not found");
+        }
     })
     .catch(error => {
         console.error("Error calling backend API:", error);
