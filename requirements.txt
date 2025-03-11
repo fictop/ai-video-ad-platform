@@ -2,8 +2,9 @@ Flask==2.3.3
 flask-cors==4.0.0
 diffusers==0.28.2
 transformers==4.39.3
+huggingface_hub==0.20.2
 opencv-python-headless==4.7.0.72
 numpy==1.26.4
 gunicorn==21.2.0
-torch==2.2.1 --index-url https://download.pytorch.org/whl/cpu
-Werkzeug==2.3.8
+torch==2.2.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
+Werkzeug==2.2.3
