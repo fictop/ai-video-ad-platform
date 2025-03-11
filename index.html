@@ -19,7 +19,8 @@
         <li><a href="#features">Features</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#contact">Contact</a></li>
-        <li><button class="cta-button">Get Started</button></li>
+        <!-- Button to trigger API call -->
+        <li><button class="cta-button" id="createAdBtn">Get Started</button></li>
       </ul>
     </nav>
   </header>
@@ -28,7 +29,8 @@
   <section id="home" class="hero">
     <h1>Create Professional AI Video Ads Effortlessly</h1>
     <p>Use AI avatars to make engaging ads in minutes.</p>
-    <button class="cta-button">Try for Free</button>
+    <!-- Optional additional button -->
+    <button class="cta-button" id="tryForFreeBtn">Try for Free</button>
   </section>
   
   <!-- Features Section -->
@@ -54,6 +56,12 @@
   <section id="pricing">
     <h2>Pricing Plans</h2>
     <p>Choose a plan that fits your business needs.</p>
+  </section>
+  
+  <!-- Result Section: To display API response -->
+  <section id="resultSection">
+    <h2>Result</h2>
+    <div id="result"></div>
   </section>
   
   <!-- Footer -->
