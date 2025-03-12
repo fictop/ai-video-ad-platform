@@ -20,18 +20,24 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(data => {
             console.log("API Response:", data);
-            // Update the result div with the response data
+            
+            // Update the result div with formatted JSON response
             const resultElement = document.getElementById("result");
             resultElement.innerText = JSON.stringify(data, null, 2);
+
             // If a video URL is returned, update and show the video player
             if (data.video_url) {
                 const videoElement = document.getElementById("videoPlayer");
-                // If the returned URL is relative, prepend the GitHub raw URL
+                const videoSource = document.getElementById("videoSource");
+
+                // If the URL is relative, prepend GitHub raw URL
                 if (!data.video_url.startsWith("http")) {
-                    videoElement.src = "https://raw.githubusercontent.com/fictop/ai-video-ad-platform/main/" + data.video_url;
+                    videoSource.src = "https://raw.githubusercontent.com/fictop/ai-video-ad-platform/main/" + data.video_url;
                 } else {
-                    videoElement.src = data.video_url;
+                    videoSource.src = data.video_url;
                 }
+
+                videoElement.load(); // Reload video source
                 videoElement.style.display = "block"; // Make the video player visible
             }
         })
