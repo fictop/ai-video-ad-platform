@@ -26,8 +26,13 @@ document.addEventListener("DOMContentLoaded", function () {
             // If a video URL is returned, update and show the video player
             if (data.video_url) {
                 const videoElement = document.getElementById("videoPlayer");
-                videoElement.src = data.video_url;
-                videoElement.style.display = "block";
+                // If the returned URL is relative, prepend the GitHub raw URL
+                if (!data.video_url.startsWith("http")) {
+                    videoElement.src = "https://raw.githubusercontent.com/fictop/ai-video-ad-platform/main/" + data.video_url;
+                } else {
+                    videoElement.src = data.video_url;
+                }
+                videoElement.style.display = "block"; // Make the video player visible
             }
         })
         .catch(error => {
