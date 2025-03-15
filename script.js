@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        // Correct URL with double dashes between fictop and ai-video-docker
+        // IMPORTANT: Use the correct URL with double dashes!
         fetch("https://fictop--ai-video-docker.hf.space/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
+                // Set the video source using the returned URL (final_ad.mp4)
                 videoSource.src = data.video_url;
                 videoElement.load();
                 videoElement.style.display = "block";
