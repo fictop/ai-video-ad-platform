@@ -92,7 +92,7 @@ def generate_voice(text):
 def animate_avatar(avatar_path, voice_path):
     output_video = "animated_avatar.mp4"
     command = [
-        "python", "sadtalker.py",  # Ensure sadtalker.py is correctly in your project
+        "python", "sadtalker.py",  # Ensure sadtalker.py is available in your project
         "--avatar", avatar_path,
         "--audio", voice_path,
         "--output", output_video
@@ -105,11 +105,15 @@ def apply_watermark(input_video, watermark_path="watermark.png", output_video="f
         "ffmpeg",
         "-i", input_video,
         "-i", watermark_path,
-        "-filter_complex", "overlay=10:10",  # Adjust the position if needed
+        "-filter_complex", "overlay=10:10",  # Adjust position if needed
         "-codec:a", "copy",
         output_video
     ]
     subprocess.run(command, check=True)
     return output_video
 
-# Remove the local app.run block so Gunicorn (from your Dockerfile) handles serving
+# Print all registered routes for debugging (check this in your logs)
+with app.app_context():
+    print("Registered routes:")
+    for rule in app.url_map.iter_rules():
+        print(rule)
