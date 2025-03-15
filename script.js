@@ -10,17 +10,21 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        fetch("https://fictop-ai--video-docker.hf.space/create-ad", {
+        // Correct URL with double dashes between fictop and ai-video-docker
+        fetch("https://fictop--ai-video-docker.hf.space/create-ad", {
             method: "POST",
-            headers: { 
-                "Content-Type": "application/json" 
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 product_name: "Demo Product",
                 prompt: "A futuristic AI ad"
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log("API Response:", data);
 
@@ -29,12 +33,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoSource = document.getElementById("videoSource");
 
                 videoSource.src = data.video_url;
-                videoElement.load();  
+                videoElement.load();
                 videoElement.style.display = "block";
 
                 videoElement.oncanplay = function () {
-                    videoElement.play();
-                    console.log("Playing video:", data.video_url);
+                    videoElement.play()
+                        .then(() => console.log("Playing video:", data.video_url))
+                        .catch(err => console.error("Error playing video:", err));
                 };
             } else {
                 console.error("No video URL found in API response");
