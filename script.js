@@ -10,12 +10,17 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        fetch("https://api.fictop.com/create-ad", {
+        fetch("https://Fictop-ai-video-docker.hf.space/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ product_name: "Demo Product", prompt: "A futuristic AI ad" })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log("API Response:", data);
 
@@ -24,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoSource = document.getElementById("videoSource");
 
                 // Set the video source
-                const videoUrl = "https://fictop.github.io/ai-video-ad-platform/" + data.video_url;
+                const videoUrl = data.video_url;
                 videoSource.src = videoUrl;
                 videoElement.load();  // Load the new video source
 
