@@ -10,6 +10,8 @@ os.makedirs("/tmp/huggingface_cache", exist_ok=True)
 
 app = Flask(__name__)
 CORS(app)
+# Allow routes to match with or without trailing slash
+app.url_map.strict_slashes = False
 
 @app.route("/")
 def home():
@@ -90,7 +92,7 @@ def generate_voice(text):
 def animate_avatar(avatar_path, voice_path):
     output_video = "animated_avatar.mp4"
     command = [
-        "python", "sadtalker.py",  # Ensure sadtalker.py is available
+        "python", "sadtalker.py",  # Ensure sadtalker.py is available in your project
         "--avatar", avatar_path,
         "--audio", voice_path,
         "--output", output_video
