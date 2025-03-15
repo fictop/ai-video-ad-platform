@@ -3,6 +3,11 @@ from flask_cors import CORS
 import os
 import subprocess
 
+# Set environment variables to use a writable cache directory in /tmp
+os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface_cache"
+os.environ["HF_HOME"] = "/tmp/huggingface_cache"
+os.makedirs("/tmp/huggingface_cache", exist_ok=True)
+
 app = Flask(__name__)
 CORS(app)
 
@@ -79,11 +84,11 @@ def generate_voice(text):
     return output_path
 
 def animate_avatar(avatar_path, voice_path):
-    # Call SadTalker to animate the avatar with the voice file
-    # Ensure you have SadTalker installed and set up in your project.
+    # Call SadTalker to animate the avatar with the voice file.
+    # Ensure SadTalker is installed and configured in your project.
     output_video = "animated_avatar.mp4"
     command = [
-        "python", "sadtalker.py",  # Path to SadTalker script
+        "python", "sadtalker.py",  # Ensure the script path is correct
         "--avatar", avatar_path,
         "--audio", voice_path,
         "--output", output_video
@@ -92,7 +97,7 @@ def animate_avatar(avatar_path, voice_path):
     return output_video
 
 def apply_watermark(input_video, watermark_path="watermark.png", output_video="final_video.mp4"):
-    # Use FFmpeg to overlay your custom watermark on the video
+    # Use FFmpeg to overlay your custom watermark on the video.
     command = [
         "ffmpeg",
         "-i", input_video,
