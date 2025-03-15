@@ -3,7 +3,7 @@ import subprocess
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# Force Hugging Face to store cache in /tmp (a writable directory)
+# Use /tmp for cache so it's writable in Hugging Face
 os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface_cache"
 os.environ["HF_HOME"] = "/tmp/huggingface_cache"
 os.makedirs("/tmp/huggingface_cache", exist_ok=True)
@@ -16,6 +16,7 @@ app.url_map.strict_slashes = False  # Allow routes with or without trailing slas
 def home():
     return "AI Video Ad Platform Backend is Running!", 200
 
+# Simple test endpoint to verify routing
 @app.route("/test", methods=["GET"])
 def test():
     return jsonify({"message": "Test endpoint is working!"}), 200
@@ -41,8 +42,8 @@ def create_ad():
         # Step 3: Animate avatar with lip-sync using SadTalker
         animated_video = animate_avatar(avatar_image, voice_file)
 
-        # Step 4: Apply custom watermark using FFmpeg
-        final_video = apply_watermark(animated_video)
+        # For testing, we are not applying a watermark.
+        final_video = animated_video
 
         return jsonify({
             "message": "Video ad generated successfully",
@@ -68,48 +69,33 @@ def generate_avatar(prompt):
     from diffusers import StableDiffusionPipeline
     import torch
 
-    # ✅ Change cache directory to /tmp (allowed in Hugging Face)
+    # Use /tmp for cache
     cache_dir = "/tmp/huggingface_cache"
     os.makedirs(cache_dir, exist_ok=True)
 
-    model_id = "runwayml/stable-diffusion-v1-5"  # ✅ Use a lighter model
+    model_id = "runwayml/stable-diffusion-v1-5"  # Using a lighter model
     device = "cpu"
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, 
-                                                   safety_checker=None, 
-                                                   cache_dir=cache_dir).to(device)
-    
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None, cache_dir=cache_dir).to(device)
     result = pipe(prompt, guidance_scale=7.5)
     image = result.images[0]
-    output_path = "/tmp/avatar.png"  # ✅ Save inside /tmp
+    output_path = "/tmp/avatar.png"
     image.save(output_path)
     return output_path
 
 def generate_voice(text):
     from TTS.api import TTS
     tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False, gpu=False)
-    output_path = "/tmp/voice.wav"  # ✅ Save inside /tmp
+    output_path = "/tmp/voice.wav"
     tts.tts_to_file(text=text, file_path=output_path)
     return output_path
 
 def animate_avatar(avatar_path, voice_path):
-    output_video = "/tmp/animated_avatar.mp4"  # ✅ Save inside /tmp
+    output_video = "/tmp/animated_avatar.mp4"
     command = [
-        "python", "sadtalker.py",  # Ensure sadtalker.py is available in your project
+        "python", "sadtalker.py",  # Ensure sadtalker.py is available in your repository
         "--avatar", avatar_path,
         "--audio", voice_path,
         "--output", output_video
-    ]
-    subprocess.run(command, check=True)
-    return output_video
-
-def apply_watermark(input_video, watermark_path="watermark.png", output_video="/tmp/final_video.mp4"):
-    command = [
-        "ffmpeg",
-        "-i", input_video,
-        "-i", watermark_path,
-        "-filter_complex", "overlay=10:10",  # Adjust position if needed
-        "-codec:a", "copy",
-        output_video
     ]
     subprocess.run(command, check=True)
     return output_video
@@ -119,3 +105,5 @@ with app.app_context():
     print("Registered routes:")
     for rule in app.url_map.iter_rules():
         print(rule)
+
+# Do not include app.run() block because Gunicorn (from your Dockerfile) will handle serving.
