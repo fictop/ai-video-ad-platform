@@ -3,14 +3,14 @@ import subprocess
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# Force Hugging Face to store cache in /tmp
+# Force Hugging Face to store cache in /tmp (a writable directory)
 os.environ["TRANSFORMERS_CACHE"] = "/tmp/huggingface_cache"
 os.environ["HF_HOME"] = "/tmp/huggingface_cache"
 os.makedirs("/tmp/huggingface_cache", exist_ok=True)
 
 app = Flask(__name__)
 CORS(app)
-# Allow routes to match with or without trailing slash
+# Allow routes with or without trailing slash
 app.url_map.strict_slashes = False
 
 @app.route("/")
@@ -92,7 +92,7 @@ def generate_voice(text):
 def animate_avatar(avatar_path, voice_path):
     output_video = "animated_avatar.mp4"
     command = [
-        "python", "sadtalker.py",  # Ensure sadtalker.py is available in your project
+        "python", "sadtalker.py",  # Ensure sadtalker.py is correctly in your project
         "--avatar", avatar_path,
         "--audio", voice_path,
         "--output", output_video
@@ -105,13 +105,11 @@ def apply_watermark(input_video, watermark_path="watermark.png", output_video="f
         "ffmpeg",
         "-i", input_video,
         "-i", watermark_path,
-        "-filter_complex", "overlay=10:10",  # Adjust position if needed
+        "-filter_complex", "overlay=10:10",  # Adjust the position if needed
         "-codec:a", "copy",
         output_video
     ]
     subprocess.run(command, check=True)
     return output_video
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port)
+# Remove the local app.run block so Gunicorn (from your Dockerfile) handles serving
