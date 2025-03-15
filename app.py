@@ -10,14 +10,12 @@ os.makedirs("/tmp/huggingface_cache", exist_ok=True)
 
 app = Flask(__name__)
 CORS(app)
-# Allow routes with or without trailing slash
-app.url_map.strict_slashes = False
+app.url_map.strict_slashes = False  # Allow routes with or without trailing slash
 
 @app.route("/")
 def home():
     return "AI Video Ad Platform Backend is Running!", 200
 
-# Simple test endpoint to verify routing
 @app.route("/test", methods=["GET"])
 def test():
     return jsonify({"message": "Test endpoint is working!"}), 200
@@ -70,27 +68,31 @@ def generate_avatar(prompt):
     from diffusers import StableDiffusionPipeline
     import torch
 
-    cache_dir = "./.cache"
+    # ✅ Change cache directory to /tmp (allowed in Hugging Face)
+    cache_dir = "/tmp/huggingface_cache"
     os.makedirs(cache_dir, exist_ok=True)
 
-    model_id = "CompVis/stable-diffusion-v1-4"
+    model_id = "runwayml/stable-diffusion-v1-5"  # ✅ Use a lighter model
     device = "cpu"
-    pipe = StableDiffusionPipeline.from_pretrained(model_id, safety_checker=None, cache_dir=cache_dir).to(device)
+    pipe = StableDiffusionPipeline.from_pretrained(model_id, 
+                                                   safety_checker=None, 
+                                                   cache_dir=cache_dir).to(device)
+    
     result = pipe(prompt, guidance_scale=7.5)
     image = result.images[0]
-    output_path = "avatar.png"
+    output_path = "/tmp/avatar.png"  # ✅ Save inside /tmp
     image.save(output_path)
     return output_path
 
 def generate_voice(text):
     from TTS.api import TTS
     tts = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False, gpu=False)
-    output_path = "voice.wav"
+    output_path = "/tmp/voice.wav"  # ✅ Save inside /tmp
     tts.tts_to_file(text=text, file_path=output_path)
     return output_path
 
 def animate_avatar(avatar_path, voice_path):
-    output_video = "animated_avatar.mp4"
+    output_video = "/tmp/animated_avatar.mp4"  # ✅ Save inside /tmp
     command = [
         "python", "sadtalker.py",  # Ensure sadtalker.py is available in your project
         "--avatar", avatar_path,
@@ -100,7 +102,7 @@ def animate_avatar(avatar_path, voice_path):
     subprocess.run(command, check=True)
     return output_video
 
-def apply_watermark(input_video, watermark_path="watermark.png", output_video="final_video.mp4"):
+def apply_watermark(input_video, watermark_path="watermark.png", output_video="/tmp/final_video.mp4"):
     command = [
         "ffmpeg",
         "-i", input_video,
@@ -112,7 +114,7 @@ def apply_watermark(input_video, watermark_path="watermark.png", output_video="f
     subprocess.run(command, check=True)
     return output_video
 
-# Print all registered routes for debugging (check this in your logs)
+# Print all registered routes for debugging
 with app.app_context():
     print("Registered routes:")
     for rule in app.url_map.iter_rules():
