@@ -15,6 +15,11 @@ CORS(app)
 def home():
     return "AI Video Ad Platform Backend is Running!", 200
 
+# Simple test endpoint to verify routing
+@app.route("/test", methods=["GET"])
+def test():
+    return jsonify({"message": "Test endpoint is working!"}), 200
+
 @app.route("/create-ad", methods=["POST", "OPTIONS", "GET"])
 def create_ad():
     if request.method == "OPTIONS":
@@ -27,16 +32,16 @@ def create_ad():
     prompt = data.get("prompt", "A professional avatar for advertisement")
 
     try:
-        # Step 1: Generate avatar image
+        # Step 1: Generate avatar image using Stable Diffusion
         avatar_image = generate_avatar(prompt)
 
-        # Step 2: Generate voice
+        # Step 2: Generate voice file using Coqui TTS
         voice_file = generate_voice(f"Introducing {product_name} - the best in its class.")
 
-        # Step 3: Animate avatar
+        # Step 3: Animate avatar with lip-sync using SadTalker
         animated_video = animate_avatar(avatar_image, voice_file)
 
-        # Step 4: Watermark
+        # Step 4: Apply custom watermark using FFmpeg
         final_video = apply_watermark(animated_video)
 
         return jsonify({
@@ -85,7 +90,7 @@ def generate_voice(text):
 def animate_avatar(avatar_path, voice_path):
     output_video = "animated_avatar.mp4"
     command = [
-        "python", "sadtalker.py",
+        "python", "sadtalker.py",  # Ensure sadtalker.py is available
         "--avatar", avatar_path,
         "--audio", voice_path,
         "--output", output_video
@@ -98,9 +103,13 @@ def apply_watermark(input_video, watermark_path="watermark.png", output_video="f
         "ffmpeg",
         "-i", input_video,
         "-i", watermark_path,
-        "-filter_complex", "overlay=10:10",
+        "-filter_complex", "overlay=10:10",  # Adjust position if needed
         "-codec:a", "copy",
         output_video
     ]
     subprocess.run(command, check=True)
     return output_video
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port)
