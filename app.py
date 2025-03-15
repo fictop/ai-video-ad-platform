@@ -10,18 +10,18 @@ app.url_map.strict_slashes = False  # Allow routes with or without trailing slas
 def home():
     return "AI Video Ad Platform Backend is Running!", 200
 
-# Simple test endpoint to verify routing
 @app.route("/test", methods=["GET"])
 def test():
     return jsonify({"message": "Test endpoint is working!"}), 200
 
-# For now, we use the static sample video as a fallback.
+# For testing, we bypass dynamic generation and return our static sample video URL.
 @app.route("/create-ad", methods=["POST"])
 def create_ad():
-    # Instead of dynamic generation, return the sample video.
+    # Replace the URL below with the full URL where your sample video is hosted.
+    sample_video_url = "https://fictop.github.io/ai-video-ad-platform/final_ad.mp4"
     return jsonify({
         "message": "Video ad generated successfully (fallback)",
-        "video_url": "final_ad.mp4",
+        "video_url": sample_video_url,
         "status": "success"
     })
 
