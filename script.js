@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        fetch("https://fictop-ai-video-docker.hf.space/create-ad", {
+        fetch("https://fictop-ai--video-docker.hf.space/create-ad", {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json" 
