@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
+import subprocess  # Import subprocess to run FFmpeg
 
 app = Flask(__name__)
 CORS(app)
@@ -42,8 +43,10 @@ def create_ad():
         synced_video = sync_lip(animated_video, voice_file)
         
         # Step 5: Merge video and audio (placeholder)
-        # IMPORTANT: For testing, we return "sample.mp4" which must exist in your GitHub repo.
-        final_video = merge_video(voice_file, synced_video)
+        merged_video = merge_video(voice_file, synced_video)
+
+        # Step 6: Apply our custom watermark using FFmpeg
+        final_video = apply_watermark(merged_video)
 
         return jsonify({
             "message": "Video ad generated successfully (test mode)",
@@ -68,7 +71,6 @@ def _handle_cors_preflight():
 def generate_avatar(prompt):
     from diffusers import StableDiffusionPipeline
     import torch
-    import os
 
     # Create a writable cache directory
     cache_dir = "./.cache"
@@ -96,8 +98,29 @@ def sync_lip(video_path, audio_path):
     return "synced_video.mp4"
 
 def merge_video(audio_path, video_path):
-    # For testing, return a dummy video file name that exists in your GitHub repository.
+    # For testing, return a dummy merged video file name.
+    # In a real scenario, this would merge the audio and video files.
     return "sample.mp4"
+
+def apply_watermark(input_video, watermark_path="watermark.png", output_video="final_video.mp4"):
+    """
+    Overlays a custom watermark onto the video using FFmpeg.
+    - input_video: path to the merged video (without watermark)
+    - watermark_path: path to your custom watermark image
+    - output_video: path where the watermarked video will be saved
+    """
+    # Construct the FFmpeg command
+    command = [
+        "ffmpeg",
+        "-i", input_video,
+        "-i", watermark_path,
+        "-filter_complex", "overlay=10:10",  # Adjust the position (x=10, y=10)
+        "-codec:a", "copy",  # Copy audio without re-encoding
+        output_video
+    ]
+    # Run the FFmpeg command
+    subprocess.run(command, check=True)
+    return output_video
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
