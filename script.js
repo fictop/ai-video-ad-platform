@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        fetch("https://Fictop-ai-video-docker.hf.space/create-ad", {
+        fetch("https://fictop--ai-video-docker.hf.space/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ product_name: "Demo Product", prompt: "A futuristic AI ad" })
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
-                // Set the video source
+                // Set the video source using the returned URL
                 const videoUrl = data.video_url;
                 videoSource.src = videoUrl;
                 videoElement.load();  // Load the new video source
@@ -38,8 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Auto-play video after it's loaded
                 videoElement.oncanplay = function () {
-                    videoElement.play();
-                    console.log("Playing video:", videoUrl);
+                    videoElement.play()
+                        .then(() => console.log("Playing video:", videoUrl))
+                        .catch(err => console.error("Video play error:", err));
                 };
             } else {
                 console.error("No video URL found in API response");
