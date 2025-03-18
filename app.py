@@ -17,7 +17,6 @@ def test():
 # For testing, we bypass dynamic generation and return our static sample video URL.
 @app.route("/create-ad", methods=["POST"])
 def create_ad():
-    # Replace the URL below with the full URL where your sample video is hosted.
     sample_video_url = "https://fictop.github.io/ai-video-ad-platform/final_ad.mp4"
     return jsonify({
         "message": "Video ad generated successfully (fallback)",
