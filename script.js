@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        fetch("https://fictop--ai-video-docker.hf.space/create-ad", {
+        // Updated the API URL to point to our domain on Serverbyt
+        fetch("https://fictop.com/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
-                // Set the video source to the full URL of the sample video.
+                // Set the video source to the returned video URL
                 videoSource.src = data.video_url;
                 videoElement.load();
                 videoElement.style.display = "block";
