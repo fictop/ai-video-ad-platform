@@ -10994,5 +10994,5 @@ header.masthead h1, header.masthead .h1 {
   opacity: 1;
 }
 body {
-    background-color: red !important;
+    background-color: white !important;  /* or #f5f5f5 for light gray */
 }
