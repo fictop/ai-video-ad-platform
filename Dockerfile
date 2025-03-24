@@ -1,27 +1,20 @@
-# Use a lightweight base image
-FROM python:3.10-alpine as builder
+# Use a minimal base image
+FROM python:3.10-slim
 
 # Set the working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev
+# Copy requirements file
+COPY requirements.txt requirements.txt
 
-# Install dependencies in a virtual environment
-COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+# Install dependencies with optimizations
+RUN pip install --no-cache-dir -r requirements.txt && \
+    pip cache purge  # Remove extra files
 
-# Second stage: create a minimal final image
-FROM python:3.10-alpine
+# Copy the rest of the app
+COPY . .
 
-# Set the working directory
-WORKDIR /app
-
-# Copy only necessary files from the builder stage
-COPY --from=builder /install /usr/local
-COPY . /app
-
-# Expose the port
+# Expose port 8000
 EXPOSE 8000
 
 # Run the application
