@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        // Updated the API URL to point to our domain on Serverbyt
-        fetch("https://fictop.com/create-ad", {
+        // Updated API URL to the Koyeb deployed backend
+        fetch("https://outstanding-vin-fictop-782bb985.koyeb.app/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
-                // Set the video source to the returned video URL
+                // Set the video source to the returned URL
                 videoSource.src = data.video_url;
                 videoElement.load();
                 videoElement.style.display = "block";
