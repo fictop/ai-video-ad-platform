@@ -6,5 +6,5 @@ huggingface_hub==0.16.4  # Smaller version
 opencv-contrib-python-headless==4.7.0.72  # Smaller OpenCV version
 numpy==1.26.4
 gunicorn==21.2.0
-torch==2.0.1+cpu --index-url https://download.pytorch.org/whl/cpu  # Smaller torch version
+torch==2.0.1+cpu --find-links https://download.pytorch.org/whl/cpu  # Corrected flag
 Werkzeug==2.3.8
