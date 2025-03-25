@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        // Updated API URL to the Koyeb deployed backend
+        // Use the Koyeb deployed backend URL
         fetch("https://outstanding-vin-fictop-782bb985.koyeb.app/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
