@@ -61,7 +61,12 @@
     <!-- This div will show API response as JSON -->
     <div id="result">Waiting for response...</div>
     <!-- Video player to display the generated video -->
-    <video id="videoPlayer" controls style="display: none; width: 100%; max-width: 500px;">
+    <video
+      id="videoPlayer"
+      controls
+      playsinline
+      style="display: none; width: 100%; max-width: 500px; margin: 0 auto;"
+    >
       <source id="videoSource" src="" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -72,7 +77,7 @@
     <p>&copy; 2025 AI Video Ad Platform. All rights reserved.</p>
   </footer>
   
-  <!-- Load script.js at the end so the DOM is fully loaded -->
+  <!-- Load script.js at the end to ensure the DOM is fully loaded -->
   <script defer src="script.js"></script>
 </body>
 </html>
