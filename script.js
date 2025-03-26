@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        // Use the Koyeb backend URL to make the API call
         fetch("https://outstanding-vin-fictop-782bb985.koyeb.app/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -32,12 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
-                // Set the video source to the returned URL and show the video element
+                // Set the video source to the returned URL
                 videoSource.src = data.video_url;
                 videoElement.load();
+                
+                // Always make the video visible
                 videoElement.style.display = "block";
 
-                // When the video is ready to play, start playback
+                // Attempt to play the video
                 videoElement.oncanplay = function () {
                     videoElement.play()
                         .then(() => console.log("Playing video:", data.video_url))
