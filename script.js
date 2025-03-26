@@ -31,18 +31,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
-                // Set the video source to the returned URL
+                // Set video source
                 videoSource.src = data.video_url;
                 videoElement.load();
-                
-                // Always make the video visible
+
+                // Ensure video visibility
                 videoElement.style.display = "block";
 
-                // Attempt to play the video
+                // Attempt to play the video with force-play logic
                 videoElement.oncanplay = function () {
                     videoElement.play()
                         .then(() => console.log("Playing video:", data.video_url))
-                        .catch(err => console.error("Error playing video:", err));
+                        .catch(err => {
+                            console.error("Error playing video:", err);
+                            alert("Your browser may be blocking autoplay. Click on the video to play.");
+                        });
                 };
             } else {
                 console.error("No video URL found in API response");
