@@ -60,17 +60,17 @@
     <h2>Result</h2>
     <!-- This div will show API response as JSON -->
     <div id="result">Waiting for response...</div>
-  
-<!-- Video player to display the generated video -->
-<video
-  id="videoPlayer"
-  controls
-  style="display: block; width: 600px; height: 340px; background: #000;"
->
-  <source id="videoSource" src="" type="video/mp4">
-  Your browser does not support the video tag.
-</video>  
-    
+    <!-- Video player to display the generated video -->
+    <video
+      id="videoPlayer"
+      controls
+      playsinline
+      style="display: block; width: 600px; height: 340px; background: #000; margin: 0 auto;"
+      poster="https://via.placeholder.com/600x340.png?text=Loading+Video"
+    >
+      <source id="videoSource" src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
   </section>
   
   <!-- Footer -->
