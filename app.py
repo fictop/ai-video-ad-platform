@@ -14,13 +14,13 @@ def home():
 def test():
     return jsonify({"message": "Test endpoint is working!"}), 200
 
-# For testing, allow both POST and GET on /create-ad so you can test directly from the browser.
+# For testing, we bypass dynamic generation and return a known-good sample video URL.
 @app.route("/create-ad", methods=["POST", "GET"])
 def create_ad():
-    # Use your video URL (replace with your actual final_ad.mp4 URL if needed)
-    sample_video_url = "https://fictop.github.io/ai-video-ad-platform/final_ad.mp4"
+    # Use a reliable test video URL from W3Schools.
+    sample_video_url = "https://www.w3schools.com/html/mov_bbb.mp4"
     return jsonify({
-        "message": "Video ad generated successfully (fallback)",
+        "message": "Video ad generated successfully (test video)",
         "video_url": sample_video_url,
         "status": "success"
     })
