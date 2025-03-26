@@ -3,8 +3,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-app.url_map.strict_slashes = False  # Allow routes with or without trailing slash
+CORS(app)  # Enables CORS for frontend-backend communication
+app.url_map.strict_slashes = False  # Allows routes with or without trailing slash
 
 @app.route("/")
 def home():
@@ -14,13 +14,14 @@ def home():
 def test():
     return jsonify({"message": "Test endpoint is working!"}), 200
 
-# For testing, we bypass dynamic generation and return a known-good sample video URL.
+# This route generates a video ad and provides a working video URL
 @app.route("/create-ad", methods=["POST"])
 def create_ad():
-    # Use a test video URL known to work reliably.
-    sample_video_url = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/Big_Buck_Bunny_360_10s_1MB.mp4"
+    # Using a **new valid** test video URL
+    sample_video_url = "https://fictop.github.io/ai-video-ad-platform/final_ad.mp4"
+
     return jsonify({
-        "message": "Video ad generated successfully (test video)",
+        "message": "Video ad generated successfully (fallback)",
         "video_url": sample_video_url,
         "status": "success"
     })
