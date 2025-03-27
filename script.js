@@ -31,14 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 const videoElement = document.getElementById("videoPlayer");
                 const videoSource = document.getElementById("videoSource");
 
-                // Set video source
+                // Set the video source to the returned URL
                 videoSource.src = data.video_url;
                 videoElement.load();
 
-                // Ensure video visibility
+                // Ensure video is visible
                 videoElement.style.display = "block";
 
-                // Attempt to play the video with force-play logic
+                // Attempt to play the video
                 videoElement.oncanplay = function () {
                     videoElement.play()
                         .then(() => console.log("Playing video:", data.video_url))
