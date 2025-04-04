@@ -10,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        fetch("https://outstanding-vin-fictop-782bb985.koyeb.app/create-ad", {
+        // Update the fetch URL to use your Render domain
+        fetch("https://ai-video-ad-platform.onrender.com/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 videoSource.src = data.video_url;
                 videoElement.load();
 
-                // Ensure video is visible
+                // Make sure the video is visible
                 videoElement.style.display = "block";
 
                 // Attempt to play the video
