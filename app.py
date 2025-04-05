@@ -3,7 +3,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+
+# Allow CORS requests only from your frontend domain
+CORS(app, origins=["https://ai-video-ad-platform.onrender.com"])
+
 app.url_map.strict_slashes = False  # Allow routes with or without trailing slash
 
 @app.route("/")
