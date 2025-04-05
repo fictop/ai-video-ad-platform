@@ -3,7 +3,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all domains
+
+# ✅ Allow only your frontend domain to prevent CORS issues
+CORS(app, origins=["https://fictop.com"], supports_credentials=True)
 
 @app.route("/")
 def home():
@@ -25,4 +27,3 @@ def create_ad():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))  # Use default port 10000 or environment PORT
     app.run(host="0.0.0.0", port=port)
-
