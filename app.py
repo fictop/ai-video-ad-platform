@@ -1,23 +1,30 @@
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
 
-# VERY IMPORTANT: allow only your frontend domain here
-CORS(app, resources={r"/*": {"origins": "https://fictop.com"}}, supports_credentials=True)
+# Allow all origins for now (this is 100% for testing)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @app.route("/")
 def home():
     return "✅ AI Video Ad Platform Backend is Running!", 200
 
-@app.route("/test")
+@app.route("/test", methods=["GET"])
 def test():
-    return jsonify({"message": "✅ Test endpoint is working!"})
+    return jsonify({"message": "✅ Test endpoint is working!"}), 200
 
 @app.route("/create-ad", methods=["POST", "GET"])
 def create_ad():
+    sample_video_url = "https://www.w3schools.com/html/mov_bbb.mp4"
     return jsonify({
         "message": "✅ Video ad generated successfully (test video)",
-        "video_url": "https://www.w3schools.com/html/mov_bbb.mp4",
+        "video_url": sample_video_url,
         "status": "success"
     })
+
+if __name__ == "__main__":
+    # Use the PORT environment variable from Render; default to 10000 if not set.
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
