@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        // Use your backend's Render domain here.
+        // IMPORTANT: Use the Render backend URL
         fetch("https://ai-video-backend-bnp9.onrender.com/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
