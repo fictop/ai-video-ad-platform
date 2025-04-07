@@ -4,7 +4,8 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-# Allow all origins for now (this is 100% for testing)
+# Allow all origins for testing.
+# Once confirmed working, you can restrict to your specific frontend domain.
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @app.route("/")
