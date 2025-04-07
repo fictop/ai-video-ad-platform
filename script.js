@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     createAdBtn.addEventListener("click", function () {
         console.log("Get Started button clicked");
 
-        // Update the fetch URL to use your Render domain
-        fetch("https://ai-video-ad-platform.onrender.com/create-ad", {
+        // Use your backend's Render domain here.
+        fetch("https://ai-video-backend-bnp9.onrender.com/create-ad", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Make sure the video is visible
                 videoElement.style.display = "block";
 
-                // Attempt to play the video
+                // Attempt to play the video automatically
                 videoElement.oncanplay = function () {
                     videoElement.play()
                         .then(() => console.log("Playing video:", data.video_url))
