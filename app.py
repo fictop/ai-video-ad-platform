@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 
-# Allow all origins for testing.
+# Allow all origins for testing. (Later you can restrict this to your frontend domain.)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @app.route("/")
@@ -25,5 +25,6 @@ def create_ad():
     })
 
 if __name__ == "__main__":
+    # Use the PORT environment variable provided by Render; default to 10000 if not set.
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
