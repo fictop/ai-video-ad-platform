@@ -3,8 +3,6 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-
-# Allow all origins for now. Once confirmed working, you can restrict to your specific domain.
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 @app.route("/")
@@ -17,7 +15,8 @@ def test():
 
 @app.route("/create-ad", methods=["POST", "GET"])
 def create_ad():
-    sample_video_url = "https://www.w3schools.com/html/mov_bbb.mp4"
+    # New video URL that works perfectly
+    sample_video_url = "https://techslides.com/demos/sample-videos/small.mp4"
     return jsonify({
         "message": "✅ Video ad generated successfully (test video)",
         "video_url": sample_video_url,
@@ -25,6 +24,5 @@ def create_ad():
     })
 
 if __name__ == "__main__":
-    # Use the PORT environment variable from Render; default to 10000 if not set.
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
